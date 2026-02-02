@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English U104 - Mid-Term Examination</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            direction: ltr;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4472C4 0%, #2E5AAC 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .timer-box {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            display: inline-block;
+            margin: 15px 0;
+        }
+        
+        .login-box, .quiz-box, .result-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .login-box h2, .quiz-box h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        select, button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            margin-bottom: 15px;
+        }
+        
+        select:focus {
+            border-color: #4472C4;
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4472C4 0%, #2E5AAC 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.02);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .question-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4472C4;
+        }
+        
+        .question-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .question-number {
+            background: #4472C4;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            border-color: #4472C4;
+            background: #f0f5ff;
+        }
+        
+        .option.selected {
+            border-color: #4472C4;
+            background: #e3ecff;
+        }
+        
+        .option input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #4472C4, #2E5AAC);
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .result-box {
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 4em;
+            font-weight: bold;
+            color: #4472C4;
+            margin: 20px 0;
+        }
+        
+        .score-label {
+            font-size: 1.3em;
+            color: #666;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .info-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .info-box.error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .instructions {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .instructions li {
+            padding: 8px 0;
+            border-bottom: 1px solid #d0e3ff;
+        }
+        
+        .instructions li:last-child {
+            border-bottom: none;
+        }
+        
+        .instructions li::before {
+            content: "✓ ";
+            color: #4472C4;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.4em;
+            }
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 English Language U104</h1>
+            <p>Mid-Term Examination - First Year 2025-2026</p>
+            <p>Communications Engineering Department</p>
+            <p>University of Diyala</p>
+        </div>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="login-box">
+            <h2>📝 Start Your Exam</h2>
+            
+            <div class="instructions">
+                <ul>
+                    <li>Total: 40 questions × 2 marks = 80 marks</li>
+                    <li>Time Limit: 60 minutes</li>
+                    <li>One attempt only!</li>
+                    <li>Questions are shuffled for each student</li>
+                    <li>Do NOT close the browser during the exam</li>
+                </ul>
+            </div>
+
+            <label for="studentName" style="display:block; margin-bottom:10px; font-weight:bold; color:#333;">
+                Select Your Name / اختر اسمك:
+            </label>
+            <select id="studentName">
+                <option value="">-- Select Your Name --</option>
+            </select>
+
+            <button id="startBtn" onclick="startQuiz()">Start Exam 🚀</button>
+            
+            <div id="loginError" class="info-box error hidden">
+                ⚠️ Please select your name first!
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quizSection" class="quiz-box hidden">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <span id="questionCounter" style="font-weight:bold; color:#666;">Question 1 / 40</span>
+                <div class="timer-box">⏱️ <span id="timer">60:00</span></div>
+            </div>
+            
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div id="questionContainer"></div>
+
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button id="prevBtn" onclick="prevQuestion()" style="flex:1;" disabled>⬅️ Previous</button>
+                <button id="nextBtn" onclick="nextQuestion()" style="flex:1;">Next ➡️</button>
+            </div>
+            
+            <button id="submitBtn" onclick="submitQuiz()" class="hidden" style="margin-top:15px; background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
+                ✅ Submit Exam
+            </button>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultSection" class="result-box hidden">
+            <h2>🎉 Exam Completed!</h2>
+            <div class="score" id="finalScore">0/80</div>
+            <p class="score-label">Your Score</p>
+            <p id="resultMessage" style="margin-top:20px; font-size:1.1em; color:#666;"></p>
+            <p style="margin-top:30px; color:#999;">Results have been recorded automatically.</p>
+            <p style="color:#999;">You may close this window now.</p>
+        </div>
+    </div>
+
+    <script>
+        // Student List
+        const students = [
+            "احمد نظير مطشر رشيد",
+            "احمد هيثم صالح حسن",
+            "احمدحيدر سعدون",
+            "اسلام غسان سعدي ابراهيم",
+            "اسماء وليد خالد محمد",
+            "اسيل بشير جليل اسماعيل",
+            "افنان عبدالله محمد نصيف",
+            "اياد محمد علي حميد",
+            "ايه علي فائق",
+            "أماني محمد علي حسين",
+            "امير عباس حامد محمود",
+            "براق محمد قاسم حميد",
+            "بشار لهوان خزعل سلمان",
+            "بقيه الله احمد فاخر فنجان",
+            "تبارك عقيل محمد مجيد",
+            "تقى عقيل اسماعيل عبدي",
+            "تقوى بشير عبد المعين",
+            "جعفر سهران حسين",
+            "حقي اسماعيل هادي",
+            "حوراء خليل حسن",
+            "حسام صدام صالح عبد",
+            "حسين علي جسام",
+            "حوراء اسعد قاسم محمد",
+            "حوراء محمد فاضل مجيد",
+            "خالد صالح بندر علي",
+            "ذاريات نهاد عويد فرج",
+            "رسل بلال طه حسن",
+            "روان وسام حسن جاسم",
+            "رؤى قصي حاتم كاظم",
+            "ريا نوفل نويص سالم",
+            "زهراء جاسم محمد",
+            "زهراء مزهر عبد سايغ",
+            "زين العابدين علاء جاسم محمد",
+            "زينب انس قيس عبود",
+            "زينه احمد ستار حسن",
+            "ساره حارث ناموش",
+            "سبأ حسين مظهور حايخ",
+            "سرور كومار علي محمد",
+            "سماح زياد هليل خلف",
+            "سحى حكمان عاشور",
+            "سي هيثم سلمان محمد",
+            "طيبة احمد محمود علي",
+            "طيبه احمد غانم",
+            "طيبة سماح حسين",
+            "عبد القدوس لؤي كاظم فرحان",
+            "عبد الله عمار عواد اسعيد",
+            "عبد الله مقداد اسماعيل عبد",
+            "عبد الملك مرعي حسن محمد",
+            "عباس عبد الحافظ ميرزه",
+            "عباس محمد عباس جواد",
+            "علي ايهاب ابراهيم راضي",
+            "علي شياع عبدالعزيز شياع",
+            "علي عبد الحسين عبد الله حسن",
+            "غفران رعد عناد عبد الرزاق",
+            "فاطمة عماد انيف كشكول",
+            "فاطمه عباس علي صفر",
+            "فاطمة محمد لطيف",
+            "فاطمه وثاب حسن كاظم",
+            "كرار علي حميد علي",
+            "كوثر داود اسماعيل داود",
+            "لجين محمد محمود حمزة",
+            "ماسي نويص عبد جبار",
+            "مآب عبد الرزاق احمد عنجاص",
+            "محمد كريم احمد علوان",
+            "محمد كنعان منصور خليل",
+            "محمد يحيى اابراهيم",
+            "مرام ئبراهيم كاظم",
+            "مرتضى عدنان كريم محمود",
+            "مريم ابراهيم محمد زكي عبداللطيف",
+            "مصطفى سعدالله اسماعيل محمد",
+            "ملاك احمد ساري جاسم",
+            "منتظر قصي جاسم محمد",
+            "مهدي عقيل عمران عيسى",
+            "هاجر مهند طه جبار",
+            "هاله سفيان كريم عبدالله",
+            "هدى هاشم محمد صالح",
+            "ورود ماجد حميد هارون",
+            "يقين فاضل لطيف محمود"
+        ];
+
+        // Questions Bank
+        const allQuestions = [
+            {q: "The Shannon-Weaver model describes:", options: ["electrical circuits", "how information travels from sender to receiver", "antenna design", "voltage regulation"], correct: 1},
+            {q: "How many main components does the Shannon-Weaver model have?", options: ["Three", "Four", "Five", "Six"], correct: 2},
+            {q: "What is the main function of the Transmitter?", options: ["To receive signals", "To store data", "To be the recipient", "To convert the message into a signal"], correct: 3},
+            {q: "Which is an example of a wireless channel?", options: ["Fiber optic cable", "Copper wire", "Air (radio waves)", "Coaxial cable"], correct: 2},
+            {q: "What does the channel introduce to the signal?", options: ["More power", "Noise and distortion", "Better quality", "Higher frequency"], correct: 1},
+            {q: "What process does the Receiver perform?", options: ["Encoding", "Demodulation and decoding", "Signal amplification", "Filtering"], correct: 1},
+            {q: "Noise in communication is:", options: ["A useful signal", "The transmission medium", "Any unwanted disturbance", "The output signal"], correct: 2},
+            {q: "High SNR means:", options: ["Very noisy signal", "Weak signal", "Clear signal quality", "No signal at all"], correct: 2},
+            {q: "Which is NOT a type of noise?", options: ["Thermal noise", "Atmospheric noise", "Digital noise", "Man-made noise"], correct: 2},
+            {q: "The word 'Recipient' means:", options: ["Sender", "Receiver", "Transmitter", "Channel"], correct: 1},
+            {q: "What is the contraction of 'I am'?", options: ["Im", "I'm", "I'am", "Ia'm"], correct: 1},
+            {q: "What is the full form of 'doesn't'?", options: ["do not", "did not", "does not", "done not"], correct: 2},
+            {q: "Which sentence is correct?", options: ["Its raining outside", "It's raining outside", "Its' raining outside", "Itss raining"], correct: 1},
+            {q: "What is the contraction of 'they are'?", options: ["their", "there", "they're", "thier"], correct: 2},
+            {q: "The word 'designs' in 'He designs circuits' is a:", options: ["Noun", "Adjective", "Verb", "Adverb"], correct: 2},
+            {q: "The word 'weak' is a:", options: ["Noun", "Adjective", "Verb", "Adverb"], correct: 1},
+            {q: "The word 'efficiently' is a:", options: ["Noun", "Adjective", "Verb", "Adverb"], correct: 3},
+            {q: "Which word is a PREPOSITION?", options: ["quickly", "beautiful", "in", "transmit"], correct: 2},
+            {q: "Which word is a CONJUNCTION?", options: ["antenna", "strong", "but", "loudly"], correct: 2},
+            {q: "The word 'She' is a:", options: ["Noun", "Verb", "Adjective", "Pronoun"], correct: 3},
+            {q: "'Transmit' means:", options: ["to receive", "to send", "to store", "to delete"], correct: 1},
+            {q: "'Conductivity' refers to the ability to:", options: ["bend", "resist electricity", "carry electrical current", "reflect light"], correct: 2},
+            {q: "'Flexible' means:", options: ["rigid and stiff", "able to bend easily", "very heavy", "extremely hot"], correct: 1},
+            {q: "'Amplify' means to:", options: ["decrease", "increase or make stronger", "remove", "store"], correct: 1},
+            {q: "A 'Filter' removes unwanted:", options: ["power", "frequencies", "energy sources", "all signals"], correct: 1},
+            {q: "A 'Semiconductor' conducts electricity:", options: ["always", "never", "under certain conditions", "only when heated"], correct: 2},
+            {q: "A 'Sensor' converts physical quantities to:", options: ["amplifies them", "electrical signals", "stores them", "transmits them wirelessly"], correct: 1},
+            {q: "'Corrosion resistant' means:", options: ["easily damaged", "resists rust and degradation", "very heavy", "good conductor"], correct: 1},
+            {q: "'Density' refers to:", options: ["ability to bend", "ability to conduct", "mass per unit volume", "resistance to heat"], correct: 2},
+            {q: "'Modulate' means to:", options: ["receive a signal", "vary a signal's properties", "delete a signal", "store a signal"], correct: 1},
+            {q: "How do you read '2.4 GHz'?", options: ["two four gigahertz", "two point four gigahertz", "twenty-four gigahertz", "two comma four gigahertz"], correct: 1},
+            {q: "How do you say '3/4' in English?", options: ["three four", "three over four", "three quarters", "three by four"], correct: 2},
+            {q: "The equation 'V = IR' means:", options: ["V plus I equals R", "V equals I multiplied by R", "V minus I equals R", "V divided by I equals R"], correct: 1},
+            {q: "The prefix 'mega' means:", options: ["thousand", "million", "billion", "trillion"], correct: 1},
+            {q: "The prefix 'milli' means:", options: ["one tenth", "one hundredth", "one thousandth", "one millionth"], correct: 2},
+            {q: "The IPO model describes:", options: ["antenna types", "channel capacity", "Input-Process-Output stages", "filter design"], correct: 2},
+            {q: "COPPER is used in wiring because of its:", options: ["light weight", "high electrical conductivity", "insulation properties", "flexibility"], correct: 1},
+            {q: "ALUMINUM is used in aerospace because it is:", options: ["very heavy", "lightweight and strong", "a semiconductor", "an insulator"], correct: 1},
+            {q: "A LOW-PASS filter allows:", options: ["only high frequencies", "frequencies below cutoff", "blocks all frequencies", "amplifies all frequencies"], correct: 1},
+            {q: "In communication, CHANNEL is the:", options: ["information source", "medium through which signal travels", "final recipient", "encoding device"], correct: 1}
+        ];
+
+        // Variables
+        let currentStudent = "";
+        let questions = [];
+        let currentQuestion = 0;
+        let answers = [];
+        let timeLeft = 60 * 60; // 60 minutes in seconds
+        let timerInterval;
+        let quizStarted = false;
+
+        // Initialize
+        function init() {
+            const select = document.getElementById('studentName');
+            students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student;
+                option.textContent = student;
+                select.appendChild(option);
+            });
+            
+            // Check if already submitted
+            checkPreviousSubmission();
+        }
+
+        // Check if student already submitted
+        function checkPreviousSubmission() {
+            const submitted = localStorage.getItem('english_u104_submitted');
+            if (submitted) {
+                const data = JSON.parse(submitted);
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('resultSection').classList.remove('hidden');
+                document.getElementById('finalScore').textContent = data.score + '/80';
+                document.getElementById('resultMessage').textContent = 
+                    `You have already submitted this exam on ${data.date}`;
+            }
+        }
+
+        // Shuffle array
+        function shuffle(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Start Quiz
+        function startQuiz() {
+            const select = document.getElementById('studentName');
+            currentStudent = select.value;
+            
+            if (!currentStudent) {
+                document.getElementById('loginError').classList.remove('hidden');
+                return;
+            }
+
+            // Check if this student already submitted
+            const submitted = localStorage.getItem('english_u104_' + currentStudent);
+            if (submitted) {
+                alert('⚠️ You have already submitted this exam!\n\nاسلام عليكم، لقد قمت بتقديم هذا الامتحان مسبقاً!');
+                return;
+            }
+
+            document.getElementById('loginError').classList.add('hidden');
+            
+            // Shuffle questions
+            questions = shuffle(allQuestions).map(q => ({
+                ...q,
+                shuffledOptions: shuffle(q.options.map((opt, idx) => ({text: opt, originalIndex: idx})))
+            }));
+            
+            answers = new Array(questions.length).fill(null);
+            
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('quizSection').classList.remove('hidden');
+            
+            displayQuestion();
+            startTimer();
+            quizStarted = true;
+        }
+
+        // Display Question
+        function displayQuestion() {
+            const q = questions[currentQuestion];
+            const container = document.getElementById('questionContainer');
+            
+            let optionsHTML = q.shuffledOptions.map((opt, idx) => `
+                <label class="option ${answers[currentQuestion] === idx ? 'selected' : ''}" onclick="selectOption(${idx})">
+                    <input type="radio" name="q${currentQuestion}" value="${idx}" 
+                        ${answers[currentQuestion] === idx ? 'checked' : ''}>
+                    ${String.fromCharCode(65 + idx)}) ${opt.text}
+                </label>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="question-card">
+                    <h3><span class="question-number">Q${currentQuestion + 1}</span> ${q.q}</h3>
+                    <div class="options">${optionsHTML}</div>
+                </div>
+            `;
+
+            // Update counter and progress
+            document.getElementById('questionCounter').textContent = 
+                `Question ${currentQuestion + 1} / ${questions.length}`;
+            document.getElementById('progressFill').style.width = 
+                `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            
+            if (currentQuestion === questions.length - 1) {
+                document.getElementById('nextBtn').classList.add('hidden');
+                document.getElementById('submitBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('nextBtn').classList.remove('hidden');
+                document.getElementById('submitBtn').classList.add('hidden');
+            }
+        }
+
+        // Select Option
+        function selectOption(idx) {
+            answers[currentQuestion] = idx;
+            displayQuestion();
+        }
+
+        // Navigation
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        // Timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 300) { // Last 5 minutes
+                    document.querySelector('.timer-box').style.background = '#dc3545';
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        // Submit Quiz
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            
+            // Calculate score
+            let score = 0;
+            questions.forEach((q, idx) => {
+                if (answers[idx] !== null) {
+                    const selectedOption = q.shuffledOptions[answers[idx]];
+                    if (selectedOption.originalIndex === q.correct) {
+                        score += 2;
+                    }
+                }
+            });
+
+            // Save to localStorage
+            const submissionData = {
+                student: currentStudent,
+                score: score,
+                date: new Date().toLocaleString('en-GB'),
+                answers: answers.map((ans, idx) => ({
+                    question: questions[idx].q,
+                    selected: ans !== null ? questions[idx].shuffledOptions[ans].text : 'No answer',
+                    correct: questions[idx].options[questions[idx].correct]
+                }))
+            };
+            
+            localStorage.setItem('english_u104_' + currentStudent, JSON.stringify(submissionData));
+            localStorage.setItem('english_u104_submitted', JSON.stringify({score: score, date: submissionData.date}));
+
+            // Send to Google Sheets (you'll need to set this up)
+            sendResults(submissionData);
+
+            // Show results
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = `${score}/80`;
+            
+            let message = "";
+            if (score >= 70) message = "Excellent! 🌟";
+            else if (score >= 60) message = "Very Good! 👏";
+            else if (score >= 50) message = "Good! 👍";
+            else if (score >= 40) message = "Pass ✓";
+            else message = "Keep trying! 💪";
+            
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        // Send results to Google Sheets
+        function sendResults(data) {
+            // Replace with your Google Apps Script Web App URL
+            const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL';
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            }).catch(error => console.log('Error:', error));
+        }
+
+        // Prevent closing
+        window.onbeforeunload = function() {
+            if (quizStarted && !document.getElementById('resultSection').classList.contains('hidden') === false) {
+                return "Are you sure you want to leave? Your progress will be lost!";
+            }
+        };
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>
